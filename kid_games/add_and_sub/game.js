@@ -8,12 +8,23 @@ const choicesContainer = document.getElementById('choices');
 const scoreElement = document.getElementById('score');
 const resultElement = document.getElementById('result');
 
+// Check login status
+function checkLoginStatus() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = '/index.html';
+    }
+    return currentUser;
+}
+
 // Add event listeners to level buttons
 document.getElementById('easy').addEventListener('click', () => startGame('easy'));
 document.getElementById('medium').addEventListener('click', () => startGame('medium'));
 document.getElementById('hard').addEventListener('click', () => startGame('hard'));
 
 function startGame(level) {
+    if (!checkLoginStatus()) return;
+    
     currentLevel = level;
     score = 0;
     scoreElement.textContent = `Score: ${score}`;
@@ -99,30 +110,54 @@ function generateChoices(correct) {
     // Shuffle the choices
     choices.sort(() => Math.random() - 0.5);
 
-    // Update the choice buttons
-    const choiceButtons = choicesContainer.getElementsByClassName('choice-btn');
-    for (let i = 0; i < choiceButtons.length; i++) {
-        choiceButtons[i].textContent = choices[i];
-        choiceButtons[i].disabled = false;
-        choiceButtons[i].onclick = () => checkAnswer(choices[i]);
+    // Clear previous choices
+    choicesContainer.innerHTML = '';
+
+    // Create buttons for each choice
+    choices.forEach(choice => {
+        const button = document.createElement('button');
+        button.textContent = choice;
+        button.onclick = () => checkAnswer(choice);
+        choicesContainer.appendChild(button);
+    });
+}
+
+function saveGameScore() {
+    const currentUser = checkLoginStatus();
+    if (!currentUser) return;
+
+    // Call the addGameScore function from the main page
+    if (window.parent.addGameScore) {
+        window.parent.addGameScore('Addition and Subtraction', score);
+    } else {
+        // Fallback if the game is not in an iframe
+        const history = JSON.parse(localStorage.getItem(`gameHistory_${currentUser.username}`) || '[]');
+        history.push({
+            date: new Date().toISOString(),
+            game: 'Addition and Subtraction',
+            score: score
+        });
+        localStorage.setItem(`gameHistory_${currentUser.username}`, JSON.stringify(history));
     }
 }
 
 function checkAnswer(selectedAnswer) {
     if (selectedAnswer === correctAnswer) {
-        score++;
-        scoreElement.textContent = `Score: ${score}`;
-        resultElement.textContent = 'Correct! 🎉';
-        resultElement.className = 'result-message correct';
+        score += 10;
+        resultElement.textContent = 'Correct!';
+        resultElement.style.color = 'green';
     } else {
-        resultElement.textContent = `Wrong! The correct answer was ${correctAnswer}`;
-        resultElement.className = 'result-message incorrect';
+        score = Math.max(0, score - 5);
+        resultElement.textContent = 'Wrong! Try again.';
+        resultElement.style.color = 'red';
     }
-
+    
+    scoreElement.textContent = `Score: ${score}`;
+    saveGameScore();
+    
     // Generate a new question after a short delay
-    setTimeout(() => {
-        resultElement.textContent = '';
-        resultElement.className = 'result-message';
-        generateQuestion();
-    }, 1500);
+    setTimeout(generateQuestion, 1000);
 }
+
+// Initialize login check when the page loads
+document.addEventListener('DOMContentLoaded', checkLoginStatus);

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Do We Have Seasons?</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #1a1a2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .container {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            margin: 20px;
+        }
+        .sun {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(#ff9933, #ff6600);
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ff6600;
+        }
+        .orbit {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+        .earth-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+        }
+        .earth-orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: orbit 20s linear infinite;
+            transform-origin: center;
+        }
+        .earth {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(#4ca5ff, #2c5fd0);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        .earth::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(0, 0, 0, 0.8) 50%, 
+                rgba(0, 0, 0, 0.8) 100%);
+            animation: dayNight 20s linear infinite;
+            transform-origin: center;
+        }
+        .axis {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) rotate(23.5deg);
+        }
+        .season-label {
+            position: absolute;
+            font-size: 1.2em;
+            color: white;
+        }
+        .summer { top: 50px; left: 50%; transform: translateX(-50%); }
+        .winter { bottom: 50px; left: 50%; transform: translateX(-50%); }
+        .spring { left: 50px; top: 50%; transform: translateY(-50%); }
+        .fall { right: 50px; top: 50%; transform: translateY(-50%); }
+        .explanation {
+            max-width: 600px;
+            margin: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes dayNight {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Why Do We Have Four Seasons?</h1>
+    <div class="container">
+        <div class="sun"></div>
+        <div class="orbit"></div>
+        <div class="earth-container">
+            <div class="earth-orbit">
+                <div class="earth"></div>
+                <div class="axis"></div>
+            </div>
+        </div>
+        <div class="season-label summer">Summer</div>
+        <div class="season-label winter">Winter</div>
+        <div class="season-label spring">Spring</div>
+        <div class="season-label fall">Fall</div>
+    </div>
+    <div class="explanation">
+        <h2>How Seasons Work:</h2>
+        <p>The Earth's axis is tilted at 23.5 degrees. As Earth orbits the Sun, this tilt causes different parts of our planet to receive more or less direct sunlight throughout the year.</p>
+        <p>When the Northern Hemisphere is tilted toward the Sun, it experiences summer while the Southern Hemisphere has winter. Six months later, the situation is reversed.</p>
+        <p>The changing amount of direct sunlight and the length of days creates our four seasons: Spring, Summer, Fall, and Winter.</p>
+    </div>
+</body>
+</html>

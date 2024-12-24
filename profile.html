@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Kid Games Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar-container {
+            margin: 20px 0;
+            position: relative;
+        }
+        .avatar-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #0066cc;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .avatar-image:hover {
+            transform: scale(1.05);
+        }
+        .default-avatars {
+            display: none;
+            position: absolute;
+            top: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            min-width: 300px;
+        }
+        .default-avatars.show {
+            display: flex;
+        }
+        .avatar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .avatar-overlay.show {
+            display: block;
+        }
+        .avatar-group {
+            text-align: center;
+        }
+        .avatar-group h3 {
+            margin: 10px 0;
+            color: #666;
+            font-size: 1.1em;
+        }
+        .avatar-options {
+            display: flex;
+            gap: 10px;
+        }
+        .default-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .default-avatar:hover {
+            transform: scale(1.1);
+            border-color: #0066cc;
+        }
+        .default-avatar.selected {
+            border-color: #0066cc;
+            transform: scale(1.1);
+        }
+        .stats-container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .total-score {
+            font-size: 24px;
+            color: #0066cc;
+            margin: 10px 0;
+        }
+        .game-history {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .game-history th, .game-history td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .game-history th {
+            background-color: #0066cc;
+            color: white;
+        }
+        .game-history tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .nav-links {
+            margin: 20px 0;
+        }
+        .nav-links a {
+            color: #0066cc;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="index.html">← Back to Games</a>
+    </div>
+
+    <div class="profile-container">
+        <h1>Hi <span id="profileUsername"></span>!</h1>
+        <div class="avatar-container">
+            <img id="avatarImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' dy='.3em' fill='%23666'%3ENo Avatar%3C/text%3E%3C/svg%3E" class="avatar-image" alt="User Avatar" onclick="toggleAvatarChoices()">
+            <div class="avatar-overlay" onclick="toggleAvatarChoices()"></div>
+            <div class="default-avatars">
+                <div class="avatar-group">
+                    <h3>Boys</h3>
+                    <div class="avatar-options">
+                        <img src="images/boy-white-avatar.svg" class="default-avatar" alt="White Boy Avatar" onclick="selectDefaultAvatar(this)" title="White Boy">
+                        <img src="images/boy-yellow-avatar.svg" class="default-avatar" alt="Asian Boy Avatar" onclick="selectDefaultAvatar(this)" title="Asian Boy">
+                        <img src="images/boy-black-avatar.svg" class="default-avatar" alt="Black Boy Avatar" onclick="selectDefaultAvatar(this)" title="Black Boy">
+                    </div>
+                </div>
+                <div class="avatar-group">
+                    <h3>Girls</h3>
+                    <div class="avatar-options">
+                        <img src="images/girl-white-avatar.svg" class="default-avatar" alt="White Girl Avatar" onclick="selectDefaultAvatar(this)" title="White Girl">
+                        <img src="images/girl-yellow-avatar.svg" class="default-avatar" alt="Asian Girl Avatar" onclick="selectDefaultAvatar(this)" title="Asian Girl">
+                        <img src="images/girl-black-avatar.svg" class="default-avatar" alt="Black Girl Avatar" onclick="selectDefaultAvatar(this)" title="Black Girl">
+                    </div>
+                </div>
+                <div class="avatar-upload">
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none">
+                    <button onclick="document.getElementById('avatarInput').click()">Upload Custom Avatar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <h2>Total Score</h2>
+            <div class="total-score" id="totalScore">0</div>
+        </div>
+
+        <div class="game-history-container">
+            <h2>Game History</h2>
+            <table class="game-history">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Best Score</th>
+                        <th>Last Played</th>
+                    </tr>
+                </thead>
+                <tbody id="gameHistoryTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function checkLoginStatus() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+            }
+            return currentUser;
+        }
+
+        function toggleAvatarChoices() {
+            document.querySelector('.default-avatars').classList.toggle('show');
+            document.querySelector('.avatar-overlay').classList.toggle('show');
+        }
+
+        function selectDefaultAvatar(element) {
+            // Remove selected class from all default avatars
+            document.querySelectorAll('.default-avatar').forEach(avatar => {
+                avatar.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked avatar
+            element.classList.add('selected');
+            
+            // Update main avatar
+            const currentUser = checkLoginStatus();
+            if (!currentUser) return;
+            
+            document.getElementById('avatarImage').src = element.src;
+            localStorage.setItem(`avatar_${currentUser.username}`, element.src);
+
+            // Close the avatar choices
+            toggleAvatarChoices();
+        }
+
+        function loadProfile() {
+            const currentUser = checkLoginStatus();
+            if (!currentUser) return;
+
+            // Set username in title
+            document.getElementById('profileUsername').textContent = currentUser.username;
+
+            // Load avatar
+            const avatar = localStorage.getItem(`avatar_${currentUser.username}`);
+            if (avatar) {
+                document.getElementById('avatarImage').src = avatar;
+                
+                // Check if it's one of the default avatars and mark as selected
+                document.querySelectorAll('.default-avatar').forEach(defaultAvatar => {
+                    if (defaultAvatar.src === avatar) {
+                        defaultAvatar.classList.add('selected');
+                    }
+                });
+            }
+
+            // Load game history
+            const history = JSON.parse(localStorage.getItem(`gameHistory_${currentUser.username}`) || '[]');
+            
+            // Process game history
+            const gameStats = {};
+            let totalScore = 0;
+
+            history.forEach(entry => {
+                if (!gameStats[entry.game]) {
+                    gameStats[entry.game] = {
+                        bestScore: entry.score,
+                        lastPlayed: entry.date,
+                        totalScore: entry.score
+                    };
+                } else {
+                    gameStats[entry.game].bestScore = Math.max(gameStats[entry.game].bestScore, entry.score);
+                    if (new Date(entry.date) > new Date(gameStats[entry.game].lastPlayed)) {
+                        gameStats[entry.game].lastPlayed = entry.date;
+                    }
+                    gameStats[entry.game].totalScore = entry.score;
+                }
+                totalScore += entry.score;
+            });
+
+            // Update total score
+            document.getElementById('totalScore').textContent = totalScore;
+
+            // Update game history table
+            const tbody = document.getElementById('gameHistoryTable');
+            tbody.innerHTML = '';
+
+            Object.entries(gameStats).forEach(([game, stats]) => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = game;
+                row.insertCell(1).textContent = stats.bestScore;
+                row.insertCell(2).textContent = new Date(stats.lastPlayed).toLocaleDateString();
+            });
+        }
+
+        // Handle avatar upload
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const currentUser = checkLoginStatus();
+                    if (!currentUser) return;
+
+                    const avatar = e.target.result;
+                    document.getElementById('avatarImage').src = avatar;
+                    localStorage.setItem(`avatar_${currentUser.username}`, avatar);
+                    
+                    // Remove selected state from default avatars
+                    document.querySelectorAll('.default-avatar').forEach(avatar => {
+                        avatar.classList.remove('selected');
+                    });
+
+                    // Close the avatar choices
+                    toggleAvatarChoices();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Close avatar choices when clicking outside
+        document.addEventListener('click', function(e) {
+            const avatarContainer = document.querySelector('.avatar-container');
+            if (!avatarContainer.contains(e.target)) {
+                document.querySelector('.default-avatars').classList.remove('show');
+                document.querySelector('.avatar-overlay').classList.remove('show');
+            }
+        });
+
+        // Load profile when page loads
+        document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+</html>

@@ -30,13 +30,170 @@
         .games-list a:hover {
             text-decoration: underline;
         }
+        .auth-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .auth-form {
+            display: inline-block;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .auth-form input {
+            margin: 5px;
+            padding: 5px;
+        }
+        .auth-form button {
+            margin: 10px;
+            padding: 5px 15px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .user-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-header a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .user-header a:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>Kid Games Collection</h1>
-    <ul class="games-list">
-        <li><a href="kid_games/clock/index.html">Clock Game</a></li>
-        <li><a href="kid_games/add_and_sub/index.html">Addition and Subtraction Game</a></li>
-    </ul>
+    <div class="auth-container" id="authSection">
+        <div class="auth-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required><br>
+                <input type="password" id="loginPassword" placeholder="Password" required><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div class="auth-form">
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <input type="text" id="signupUsername" placeholder="Username" required><br>
+                <input type="password" id="signupPassword" placeholder="Password" required><br>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="userContent" class="hidden">
+        <div class="user-header">
+            <div class="user-info">
+                <img id="userAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23ddd'/%3E%3C/svg%3E" class="avatar" alt="User Avatar">
+                <span>Welcome, <span id="username"></span>!</span>
+            </div>
+            <div>
+                <a href="profile.html">View Profile</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+
+        <h2>Available Games</h2>
+        <ul class="games-list">
+            <li><a href="kid_games/clock/index.html">Clock Game</a></li>
+            <li><a href="kid_games/add_and_sub/index.html">Addition and Subtraction Game</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // User management
+        let currentUser = null;
+
+        function init() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showUserContent();
+                loadUserAvatar();
+            }
+        }
+
+        function showUserContent() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('userContent').classList.remove('hidden');
+            document.getElementById('username').textContent = currentUser.username;
+        }
+
+        function loadUserAvatar() {
+            const avatar = localStorage.getItem(`avatar_${currentUser.username}`);
+            if (avatar) {
+                document.getElementById('userAvatar').src = avatar;
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('userContent').classList.add('hidden');
+        }
+
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username] && users[username].password === password) {
+                currentUser = { username: username };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showUserContent();
+                loadUserAvatar();
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username]) {
+                alert('Username already exists');
+                return;
+            }
+            
+            users[username] = { password: password };
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = { username: username };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            showUserContent();
+        });
+
+        // Initialize the page
+        init();
+    </script>
 </body>
 </html>

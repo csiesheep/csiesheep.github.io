@@ -1,4 +1,16 @@
+// Check login status
+function checkLoginStatus() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = '/index.html';
+    }
+    return currentUser;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Check login status first
+    if (!checkLoginStatus()) return;
+
     const canvas = document.getElementById('clockCanvas');
     const ctx = canvas.getContext('2d');
     const options = document.querySelectorAll('.option');
@@ -89,6 +101,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return options.sort(() => Math.random() - 0.5);
     }
 
+    function saveGameScore() {
+        const currentUser = checkLoginStatus();
+        if (!currentUser) return;
+
+        // Call the addGameScore function from the main page
+        if (window.parent.addGameScore) {
+            window.parent.addGameScore('Clock Game', score);
+        } else {
+            // Fallback if the game is not in an iframe
+            const history = JSON.parse(localStorage.getItem(`gameHistory_${currentUser.username}`) || '[]');
+            history.push({
+                date: new Date().toISOString(),
+                game: 'Clock Game',
+                score: score
+            });
+            localStorage.setItem(`gameHistory_${currentUser.username}`, JSON.stringify(history));
+        }
+    }
+
     function newQuestion() {
         feedback.textContent = '';
         options.forEach(btn => {
@@ -117,13 +148,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         if (isCorrect) {
-            score += 1;
+            score += 10;
             scoreElement.textContent = score;
             feedback.textContent = 'Correct! Well done!';
         } else {
+            score = Math.max(0, score - 5);
+            scoreElement.textContent = score;
             selectedOption.classList.add('wrong');
             feedback.textContent = 'Try again!';
         }
+
+        saveGameScore();
     }
 
     options.forEach(option => {
