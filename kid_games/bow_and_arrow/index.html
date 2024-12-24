@@ -36,6 +36,51 @@
             right: 100px;
             top: 50%;
             transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            border-radius: 50%;
+        }
+        .target-points {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            pointer-events: none;
+            font-size: 24px;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        #wind-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #wind-arrow {
+            width: 40px;
+            height: 20px;
+            position: relative;
+        }
+        #wind-strength {
+            font-weight: bold;
+        }
+        #wind-toggle {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #wind-toggle:hover {
+            background-color: #45a049;
+        }
+        #wind-toggle.disabled {
+            background-color: #ccc;
         }
         #bow {
             position: absolute;
@@ -66,7 +111,8 @@
             width: 60px;
             height: 8px;
             transform-origin: left center;
-            z-index: 100;
+            pointer-events: none;
+            will-change: transform;
         }
         #power-meter {
             position: absolute;
@@ -116,6 +162,129 @@
         button:hover {
             background-color: #45a049;
         }
+        #wind-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .points-popup {
+            position: absolute;
+            font-size: 64px;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            pointer-events: none;
+            z-index: 1000;
+            animation: popPoints 1.5s ease-out forwards;
+            transform-origin: center;
+        }
+        .points-popup.score-100 {
+            color: #FFD700;
+            font-size: 96px;
+            text-shadow: 
+                0 0 10px #FFD700,
+                0 0 20px #FFA500,
+                0 0 30px #FF8C00;
+        }
+        .points-popup.score-50 {
+            color: #FFA500;
+            font-size: 80px;
+            text-shadow: 
+                0 0 8px #FFA500,
+                0 0 16px #FF8C00;
+        }
+        .points-popup.score-20 {
+            color: #FF4500;
+            font-size: 72px;
+        }
+        .points-popup.score-10 {
+            color: #FF6347;
+        }
+        @keyframes popPoints {
+            0% {
+                transform: translate(-50%, -50%) scale(0.3);
+                opacity: 0;
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+        }
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            transform-origin: center;
+        }
+        @keyframes explode {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(30) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .hit-ring {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 998;
+            border: 2px solid gold;
+            animation: hitRing 0.5s ease-out forwards;
+        }
+        @keyframes hitRing {
+            0% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+        .wind-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+        }
+        @keyframes windMove {
+            0% {
+                opacity: 0;
+                transform: translateX(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(var(--wind-distance));
+            }
+        }
     </style>
 </head>
 <body>
@@ -134,6 +303,21 @@
     </div>
     
     <div id="gameContainer">
+        <div id="wind-effect"></div>
+        <div id="wind-indicator">
+            <div>Wind: <span id="wind-strength">0</span></div>
+            <svg id="wind-arrow" viewBox="0 0 40 20">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                        refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                    </marker>
+                </defs>
+                <line x1="0" y1="10" x2="35" y2="10" stroke="#333" 
+                    stroke-width="2" marker-end="url(#arrowhead)"/>
+            </svg>
+            <button id="wind-toggle">Disable Wind</button>
+        </div>
         <div id="score">Score: <span id="scoreValue">0</span></div>
         <div id="power-meter"><div id="power-level"></div></div>
         <canvas id="target" width="200" height="200"></canvas>
