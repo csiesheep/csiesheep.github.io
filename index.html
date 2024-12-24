@@ -15,20 +15,59 @@
             color: #333;
             text-align: center;
         }
-        .games-list {
-            list-style: none;
+        .games-section {
+            margin: 40px 0;
+        }
+
+        .games-section h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             padding: 0;
+            list-style: none;
         }
-        .games-list li {
-            margin: 10px 0;
+
+        .game-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
         }
-        .games-list a {
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .game-card a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
             text-decoration: none;
-            color: #0066cc;
-            font-size: 1.2em;
+            color: #333;
         }
-        .games-list a:hover {
-            text-decoration: underline;
+
+        .game-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            margin: 0;
         }
         .auth-container {
             text-align: center;
@@ -116,17 +155,39 @@
             </div>
         </div>
 
-        <h2>Math Games</h2>
-        <ul class="games-list">
-            <li><a href="kid_games/clock/index.html">What Time Is It?</a></li>
-            <li><a href="kid_games/add_and_sub/index.html">Addition and Subtraction</a></li>
-            <li><a href="kid_games/algebra/index.html">Algebra</a></li>
-        </ul>
+        <div class="games-section">
+            <h2>Math Games</h2>
+            <ul class="games-grid">
+                <li class="game-card">
+                    <a href="kid_games/clock/index.html">
+                        <img src="images/game-icons/clock.svg" alt="Clock Game" class="game-icon">
+                        <h3 class="game-title">What Time Is It?</h3>
+                    </a>
+                </li>
+                <li class="game-card">
+                    <a href="kid_games/add_and_sub/index.html">
+                        <img src="images/game-icons/math.svg" alt="Math Game" class="game-icon">
+                        <h3 class="game-title">Addition and Subtraction</h3>
+                    </a>
+                </li>
+                <li class="game-card">
+                    <a href="kid_games/algebra/index.html">
+                        <img src="images/game-icons/algebra.svg" alt="Algebra Game" class="game-icon">
+                        <h3 class="game-title">Algebra</h3>
+                    </a>
+                </li>
+            </ul>
 
-        <h2>Games</h2>
-        <ul class="games-list">
-            <li><a href="kid_games/bow_and_arrow/index.html">Bow and Arrow</a></li>
-        </ul>
+            <h2>Games</h2>
+            <ul class="games-grid">
+                <li class="game-card">
+                    <a href="kid_games/bow_and_arrow/index.html">
+                        <img src="images/game-icons/bow.svg" alt="Bow and Arrow Game" class="game-icon">
+                        <h3 class="game-title">Bow and Arrow</h3>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <script>
