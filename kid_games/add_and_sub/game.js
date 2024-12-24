@@ -6,6 +6,7 @@ let correctAnswer = 0;
 const equationElement = document.getElementById('equation');
 const choicesContainer = document.getElementById('choices');
 const scoreElement = document.getElementById('score');
+const resultElement = document.getElementById('result');
 
 // Add event listeners to level buttons
 document.getElementById('easy').addEventListener('click', () => startGame('easy'));
@@ -111,11 +112,17 @@ function checkAnswer(selectedAnswer) {
     if (selectedAnswer === correctAnswer) {
         score++;
         scoreElement.textContent = `Score: ${score}`;
-        alert('Correct! 🎉');
+        resultElement.textContent = 'Correct! 🎉';
+        resultElement.className = 'result-message correct';
     } else {
-        alert(`Wrong! The correct answer was ${correctAnswer}`);
+        resultElement.textContent = `Wrong! The correct answer was ${correctAnswer}`;
+        resultElement.className = 'result-message incorrect';
     }
 
-    // Generate a new question
-    generateQuestion();
+    // Generate a new question after a short delay
+    setTimeout(() => {
+        resultElement.textContent = '';
+        resultElement.className = 'result-message';
+        generateQuestion();
+    }, 1500);
 }
