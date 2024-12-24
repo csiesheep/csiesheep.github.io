@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Math Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 20px;
+        }
+        .level-buttons {
+            margin: 20px 0;
+        }
+        .level-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #easy { background-color: #90EE90; }
+        #medium { background-color: #FFB347; }
+        #hard { background-color: #FF6B6B; }
+        .level-btn:hover {
+            opacity: 0.8;
+        }
+        .equation {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .choice-btn {
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: white;
+            transition: background-color 0.3s;
+        }
+        .choice-btn:hover {
+            background-color: #e9ecef;
+        }
+        .score {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧮 Kids Math Game 🎮</h1>
+    <div class="game-container">
+        <div class="level-buttons">
+            <button id="easy" class="level-btn">Easy</button>
+            <button id="medium" class="level-btn">Medium</button>
+            <button id="hard" class="level-btn">Hard</button>
+        </div>
+        <div class="equation" id="equation">Select a level to start!</div>
+        <div class="choices" id="choices">
+            <button class="choice-btn" disabled>?</button>
+            <button class="choice-btn" disabled>?</button>
+            <button class="choice-btn" disabled>?</button>
+            <button class="choice-btn" disabled>?</button>
+        </div>
+        <div class="score" id="score">Score: 0</div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
