@@ -261,21 +261,41 @@
             const gameStats = {};
             let totalScore = 0;
 
+            // Group scores by game and date to find the final score for each game session
+            const gameScores = {};
             history.forEach(entry => {
-                if (!gameStats[entry.game]) {
-                    gameStats[entry.game] = {
-                        bestScore: entry.score,
-                        lastPlayed: entry.date,
-                        totalScore: entry.score
+                const date = new Date(entry.date).toLocaleDateString();
+                const key = `${entry.game}_${date}`;
+                
+                if (!gameScores[key]) {
+                    gameScores[key] = {
+                        game: entry.game,
+                        date: entry.date,
+                        score: entry.score
+                    };
+                } else if (new Date(entry.date) > new Date(gameScores[key].date)) {
+                    // Update if this is a more recent score from the same game session
+                    gameScores[key].score = entry.score;
+                    gameScores[key].date = entry.date;
+                }
+            });
+
+            // Process the final scores
+            Object.values(gameScores).forEach(session => {
+                if (!gameStats[session.game]) {
+                    gameStats[session.game] = {
+                        bestScore: session.score,
+                        lastPlayed: session.date,
+                        totalScore: session.score
                     };
                 } else {
-                    gameStats[entry.game].bestScore = Math.max(gameStats[entry.game].bestScore, entry.score);
-                    if (new Date(entry.date) > new Date(gameStats[entry.game].lastPlayed)) {
-                        gameStats[entry.game].lastPlayed = entry.date;
+                    gameStats[session.game].bestScore = Math.max(gameStats[session.game].bestScore, session.score);
+                    if (new Date(session.date) > new Date(gameStats[session.game].lastPlayed)) {
+                        gameStats[session.game].lastPlayed = session.date;
+                        gameStats[session.game].totalScore = session.score; // Only keep the most recent score
                     }
-                    gameStats[entry.game].totalScore = entry.score;
                 }
-                totalScore += entry.score;
+                totalScore += session.score; // Add the final score from each game session
             });
 
             // Update total score
