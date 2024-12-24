@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archery Game</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #87CEEB;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #gameContainer {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background-color: #B0E0E6;
+            border: 2px solid #4682B4;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        #target {
+            position: absolute;
+            right: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #bow {
+            position: absolute;
+            left: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bow-string {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #8B4513;
+            transform-origin: center;
+        }
+        #arrow {
+            position: absolute;
+            width: 60px;
+            height: 8px;
+            transform-origin: left center;
+        }
+        .flying-arrow {
+            position: absolute;
+            width: 60px;
+            height: 8px;
+            transform-origin: left center;
+            z-index: 100;
+        }
+        #power-meter {
+            position: absolute;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 200px;
+            background-color: #ddd;
+            border: 2px solid #666;
+        }
+        #power-level {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #ff4444;
+            transition: height 0.1s linear;
+        }
+        .instructions {
+            margin: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            text-align: center;
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>Archery Game</h2>
+        <p>Use ↑ ↓ arrow keys to aim</p>
+        <p>Hold SPACE to charge power, release to shoot!</p>
+        <p>Try to hit the center for maximum points:</p>
+        <ul>
+            <li>Center (Red): 100 points</li>
+            <li>Inner Ring (White): 50 points</li>
+            <li>Middle Ring (Red): 20 points</li>
+            <li>Outer Ring (White): 10 points</li>
+        </ul>
+        <p>You have 10 arrows - make them count!</p>
+    </div>
+    
+    <div id="gameContainer">
+        <div id="score">Score: <span id="scoreValue">0</span></div>
+        <div id="power-meter"><div id="power-level"></div></div>
+        <canvas id="target" width="200" height="200"></canvas>
+        <div id="bow">
+            <div class="bow-string"></div>
+            <svg class="bow-body" width="80" height="160" viewBox="0 0 80 160">
+                <path d="M 40 10 Q 70 80 40 150" stroke="#8B4513" stroke-width="8" fill="none"/>
+            </svg>
+            <div id="arrow">
+                <svg width="60" height="8" viewBox="0 0 60 8">
+                    <line x1="0" y1="4" x2="45" y2="4" stroke="#8B4513" stroke-width="2"/>
+                    <polygon points="45,0 60,4 45,8" fill="#8B4513"/>
+                </svg>
+            </div>
+        </div>
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
