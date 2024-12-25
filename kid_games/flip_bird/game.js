@@ -9,6 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const christmasScore = document.getElementById('christmasScore');
     const normalInstructions = document.getElementById('normalInstructions');
     const christmasInstructions = document.getElementById('christmasInstructions');
+    const bestScoreElement = document.getElementById('bestScore');
+    const visitCountElement = document.getElementById('visitCount');
+
+    // Initialize visit counter and best score
+    let visitCount = parseInt(localStorage.getItem('flappyBirdVisits') || '0');
+    let bestScore = parseInt(localStorage.getItem('flappyBirdBestScore') || '0');
+    visitCount++;
+    localStorage.setItem('flappyBirdVisits', visitCount);
+    visitCountElement.textContent = visitCount;
+    bestScoreElement.textContent = bestScore;
 
     // Game constants
     const GRAVITY = 0.5;
@@ -372,6 +382,14 @@ document.addEventListener('DOMContentLoaded', () => {
         startButton.classList.remove('hidden');
         startButton.textContent = 'Play Again';
         
+        // Update best score
+        const finalScore = isChristmasTheme ? Math.floor(score / 5) : score;
+        if (finalScore > bestScore) {
+            bestScore = finalScore;
+            localStorage.setItem('flappyBirdBestScore', bestScore);
+            bestScoreElement.textContent = bestScore;
+        }
+        
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
@@ -382,8 +400,16 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.font = '24px Arial';
         if (isChristmasTheme) {
             ctx.fillText(`Gifts Collected: ${Math.floor(score / 5)}`, canvas.width/2, canvas.height/2 + 40);
+            if (finalScore === bestScore) {
+                ctx.fillStyle = '#4CAF50';
+                ctx.fillText('New Best Score!', canvas.width/2, canvas.height/2 + 70);
+            }
         } else {
             ctx.fillText(`Score: ${score}`, canvas.width/2, canvas.height/2 + 40);
+            if (finalScore === bestScore) {
+                ctx.fillStyle = '#4CAF50';
+                ctx.fillText('New Best Score!', canvas.width/2, canvas.height/2 + 70);
+            }
         }
     }
 
