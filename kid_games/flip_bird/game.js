@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const christmasInstructions = document.getElementById('christmasInstructions');
     const bestScoreElement = document.getElementById('bestScore');
     const visitCountElement = document.getElementById('visitCount');
+    const totalVisitsElement = document.getElementById('totalVisits');
 
     // Initialize visit counter and best score
     let visitCount = parseInt(localStorage.getItem('flappyBirdVisits') || '0');
@@ -19,6 +20,31 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('flappyBirdVisits', visitCount);
     visitCountElement.textContent = visitCount;
     bestScoreElement.textContent = bestScore;
+
+    // Update total visits counter
+    fetch('visit_counter.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        totalVisitsElement.textContent = data.count.toLocaleString();
+    })
+    .catch(error => {
+        console.error('Error updating visit count:', error);
+        // Fallback to getting the current count without incrementing
+        fetch('visit_counter.php')
+            .then(response => response.json())
+            .then(data => {
+                totalVisitsElement.textContent = data.count.toLocaleString();
+            })
+            .catch(error => {
+                console.error('Error getting visit count:', error);
+                totalVisitsElement.textContent = 'N/A';
+            });
+    });
 
     // Game constants
     const GRAVITY = 0.5;
