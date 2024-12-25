@@ -7,20 +7,36 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="header">
+        <a href="../../index.html" class="home-button">
+            <svg class="home-icon" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            Home
+        </a>
         <h1>What Time Is It?</h1>
-        <div id="score">Score: <span>0</span></div>
-        <div class="clock-container">
-            <canvas id="clockCanvas" width="200" height="200"></canvas>
+    </div>
+    
+    <div class="container">
+        <div class="game-info">
+            <div id="score">Score: <span>0</span></div>
+            <div id="question-counter">Question: <span>0</span>/10</div>
+            <button id="restart" class="restart-button">Restart</button>
         </div>
+        
+        <div class="clock-container">
+            <canvas id="clockCanvas" width="300" height="300"></canvas>
+        </div>
+        
         <div class="options-container">
             <button class="option"></button>
             <button class="option"></button>
             <button class="option"></button>
             <button class="option"></button>
         </div>
+        
         <div id="feedback"></div>
-        <button id="next">Next Question</button>
+        <button id="next" class="next-button">Next Question</button>
     </div>
     <script src="script.js"></script>
 </body>
