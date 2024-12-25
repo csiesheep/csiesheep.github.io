@@ -6,62 +6,63 @@
     <title>Algebra Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
         }
 
         .game-container {
-            background-color: white;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
+            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: center;
         }
 
-        .level-selector {
-            margin: 20px 0;
+        .level-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .level-btn {
             padding: 10px 20px;
-            margin: 0 10px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
             transition: background-color 0.3s;
         }
 
-        .level-btn.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .level-btn:not(.active) {
-            background-color: #ddd;
+        .level-btn:hover {
+            background-color: #45a049;
         }
 
         .problem-container {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .equation {
             font-size: 24px;
             margin: 20px 0;
-            padding: 20px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
         }
 
         .input-container {
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
+            margin: 20px auto;
+            max-width: 400px;
         }
 
         .input-group {
@@ -85,6 +86,11 @@
             outline: none;
             border-color: #4CAF50;
             box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .number-pad-container {
+            margin: 20px auto;
+            max-width: 400px;
         }
 
         .number-pad {
@@ -148,11 +154,9 @@
         }
 
         .score-container {
-            margin-top: 20px;
+            margin: 20px auto;
             font-size: 18px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+            color: #333;
         }
 
         .problem-counter {
@@ -185,10 +189,6 @@
 
         .incorrect {
             color: #f44336;
-        }
-
-        .equation {
-            margin: 10px 0;
         }
 
         .solution-container {
@@ -246,9 +246,63 @@
         .next-btn.show {
             display: inline-block;
         }
+
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .home-button {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            color: #2196F3;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .home-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <a href="../../index.html" class="home-button">
+            <svg class="home-icon" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            Home
+        </a>
+        <h1>Algebra Game</h1>
+    </div>
     <div class="game-container">
         <div class="level-container">
             <button class="level-btn" data-level="easy">Easy</button>
