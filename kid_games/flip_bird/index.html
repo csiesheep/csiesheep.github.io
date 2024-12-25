@@ -131,6 +131,18 @@
         .total-visits {
             color: #9C27B0;
         }
+
+        .visit-counter {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .visit-counter:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -154,9 +166,11 @@
         </div>
         <div class="stats">
             <span class="best-score">Best: <span id="bestScore">0</span></span>
-            <span class="visits">Your Visits: <span id="visitCount">0</span></span>
-            <span class="total-visits">Total Visits: <span id="totalVisits">0</span></span>
+            <span class="visits">Your Trials: <span id="visitCount">0</span></span>
         </div>
+    </div>
+    <div class="visit-counter">
+        <a href="https://info.flagcounter.com/UXiy"><img src="https://s05.flagcounter.com/count/UXiy/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_2/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
     </div>
     <script src="game.js"></script>
 </body>
