@@ -115,6 +115,8 @@
             font-size: 14px;
             color: #666;
             margin-top: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .best-score {
@@ -124,6 +126,10 @@
 
         .visits {
             color: #2196F3;
+        }
+
+        .total-visits {
+            color: #9C27B0;
         }
     </style>
 </head>
@@ -148,7 +154,8 @@
         </div>
         <div class="stats">
             <span class="best-score">Best: <span id="bestScore">0</span></span>
-            <span class="visits">Visits: <span id="visitCount">0</span></span>
+            <span class="visits">Your Visits: <span id="visitCount">0</span></span>
+            <span class="total-visits">Total Visits: <span id="totalVisits">0</span></span>
         </div>
     </div>
     <script src="game.js"></script>

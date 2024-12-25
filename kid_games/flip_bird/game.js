@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const christmasInstructions = document.getElementById('christmasInstructions');
     const bestScoreElement = document.getElementById('bestScore');
     const visitCountElement = document.getElementById('visitCount');
+    const totalVisitsElement = document.getElementById('totalVisits');
 
     // Initialize visit counter and best score
     let visitCount = parseInt(localStorage.getItem('flappyBirdVisits') || '0');
@@ -19,6 +20,31 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('flappyBirdVisits', visitCount);
     visitCountElement.textContent = visitCount;
     bestScoreElement.textContent = bestScore;
+
+    // Update total visits counter
+    fetch('visit_counter.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        totalVisitsElement.textContent = data.count.toLocaleString();
+    })
+    .catch(error => {
+        console.error('Error updating visit count:', error);
+        // Fallback to getting the current count without incrementing
+        fetch('visit_counter.php')
+            .then(response => response.json())
+            .then(data => {
+                totalVisitsElement.textContent = data.count.toLocaleString();
+            })
+            .catch(error => {
+                console.error('Error getting visit count:', error);
+                totalVisitsElement.textContent = 'N/A';
+            });
+    });
 
     // Game constants
     const GRAVITY = 0.5;
@@ -413,9 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function update() {
-        if (!isGameRunning) return;
-
+    function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Update snow
@@ -466,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         drawBird();
-        gameLoop = requestAnimationFrame(update);
+        gameLoop = requestAnimationFrame(draw);
     }
 
     function toggleTheme() {
@@ -483,12 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isGameRunning) {
             startGame(); // Restart the game with new theme
-        }
-    }
-
-    function flap() {
-        if (isGameRunning) {
-            bird.velocity = FLAP_SPEED;
         }
     }
 
@@ -512,19 +530,25 @@ document.addEventListener('DOMContentLoaded', () => {
         startButton.classList.add('hidden');
         
         isGameRunning = true;
-        gameLoop = requestAnimationFrame(update);
+        draw();
     }
 
     // Event listeners
     startButton.addEventListener('click', startGame);
     themeButton.addEventListener('click', toggleTheme);
-    canvas.addEventListener('click', flap);
+    canvas.addEventListener('click', () => {
+        if (isGameRunning) {
+            bird.velocity = FLAP_SPEED;
+        } else {
+            startGame();
+        }
+    });
     document.addEventListener('keydown', (e) => {
         if (e.code === 'Space') {
             if (!isGameRunning && !startButton.classList.contains('hidden')) {
                 startGame();
             } else {
-                flap();
+                bird.velocity = FLAP_SPEED;
             }
             e.preventDefault();
         }
