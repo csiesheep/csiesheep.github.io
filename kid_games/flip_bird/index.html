@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .home-button {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            color: #2196F3;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .home-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #gameCanvas {
+            background-color: #87CEEB;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        #gameCanvas.christmas {
+            background-color: #1a4c6b;
+            background-image: linear-gradient(to bottom, #1a4c6b 0%, #2c3e50 100%);
+        }
+
+        .game-info {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        #startButton, #themeButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #startButton {
+            background-color: #4CAF50;
+        }
+
+        #startButton:hover {
+            background-color: #45a049;
+        }
+
+        #themeButton {
+            background-color: #f44336;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #themeButton:hover {
+            background-color: #d32f2f;
+        }
+
+        #themeButton .theme-icon {
+            font-size: 20px;
+        }
+
+        .gift-counter {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .instructions {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .instructions h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .instructions p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../../index.html" class="home-button">
+            <svg class="home-icon" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            Home
+        </a>
+        <h1>Flappy Bird Game</h1>
+    </div>
+
+    <div class="game-container">
+        <div class="instructions">
+            <h2>How to Play</h2>
+            <p>Press SPACE or Click to control flight</p>
+            <p id="normalInstructions" class="hidden">Avoid the pipes and try to score as many points as possible!</p>
+            <p id="christmasInstructions">Help Santa collect gifts between chimneys! More gifts = More points!</p>
+        </div>
+        <div class="game-info">
+            <span id="normalScore" class="hidden">Score: <span id="score">0</span></span>
+            <span id="christmasScore">Gifts: <span id="gifts" class="gift-counter">0</span></span>
+        </div>
+        <canvas id="gameCanvas" class="christmas" width="400" height="600"></canvas>
+        <div class="controls">
+            <button id="startButton">Start Game</button>
+            <button id="themeButton">
+                <span class="theme-icon">🐦</span>
+                Normal Mode
+            </button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
